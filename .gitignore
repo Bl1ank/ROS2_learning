@@ -1,2 +1,46 @@
-# 不添加编译产生的可执行文件
+# ========================
+# ROS 2 工作空间生成目录
+# ========================
+build/
+install/
+log/
+
+# ========================
+# CMake / 构建中间产物与缓存
+# ========================
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+AMENT_IGNORE
+ament_cmake_*
+
+# CTest 测试相关
+CTestConfiguration.ini
+CTestCustom.cmake
+CTestTestfile.cmake
+Testing/
+
+# ========================
+# 编译生成的二进制可执行文件与库
+# ========================
 *.exe
+*.o
+*.so
+*.a
+demo_cpp_node
+
+# ========================
+# IDE 与编辑器配置
+# ========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+
+# ========================
+# Python 缓存
+# ========================
+__pycache__/
+*.py[cod]
