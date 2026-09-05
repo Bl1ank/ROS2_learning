@@ -4,4 +4,8 @@
 * Complete the installation of ROS2(jazzy) and Compilers and interpreters
 
 ## chapt2
-* learning concept of **node** **package** **workspace** and some new new features about python and C++
+* learning concept of **node** **package** **workspace** and some **new features** about python and C++
+
+## chapt3
+* learning **Topic** Subscription and Publication
+* Customize ROS2 message interface
