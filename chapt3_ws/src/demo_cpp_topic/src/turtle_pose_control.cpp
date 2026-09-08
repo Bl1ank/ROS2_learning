@@ -43,18 +43,16 @@ public:
         //生成初始随机点
         random_point_output();
         //用定时器向小海龟控制节点发布话题
-        m_control_timer=this->create_wall_timer(20ms,ctl_fun);
-        m_rest_timer=this->create_wall_timer(3s,reset_fun); 
+        m_control_timer=this->create_wall_timer(20ms,std::bind(&TurtlePoseControl::ctl_func));
+        m_rest_timer=this->create_wall_timer(2s,std::bind(&TurtlePoseControl::reset_func)); 
         m_rest_timer->cancel();     
     }
     //生成随机点
     void random_point_output();
     //速度控制函数
     void ctl_func();
-    std::function<void()> ctl_fun = std::bind(&TurtlePoseControl::ctl_func, this);
     //小海龟停止函数
     void reset_func();
-    std::function<void()> reset_fun = std::bind(&TurtlePoseControl::reset_func, this);
 
 };
 void TurtlePoseControl::random_point_output(){
@@ -63,7 +61,11 @@ void TurtlePoseControl::random_point_output(){
 }
 void TurtlePoseControl::ctl_func(){
         double distance=sqrt((goal_x-current_x)*(goal_x-current_x)+(goal_y-current_y)*(goal_y-current_y));
-        double distheta=std::abs(std::atan2(goal_y - current_y, goal_x - current_x)-current_theta);
+        double distheta=std::atan2(goal_y - current_y, goal_x - current_x)-current_theta;
+        //保持角差属于[-PI,PI]
+        while (distheta > M_PI)  distheta -= 2.0 * M_PI;
+        while (distheta < -M_PI) distheta += 2.0 * M_PI;
+
         geometry_msgs::msg::Twist ctr_msg;
         if(distance<0.05){
             //小海龟到达逻辑，等待并设置新目标点
@@ -73,16 +75,16 @@ void TurtlePoseControl::ctl_func(){
             m_control_timer->cancel();
             m_rest_timer->reset();
 
-        }else if(distance>0.05&&distheta>0.1){
+        }else if(std::abs(distheta)>0.1){
             //小海龟根据角度差赋予角速度原地旋转阶段
             ctr_msg.linear.x=0.0;
             ctr_msg.angular.z=KP_ANGULAR*distheta;
-        }else if(distance>0.05&&distheta<0.1){
+        }else if(std::abs(distheta)<0.1){
             //小海龟补齐角度差后赋予线速度阶段
-            if(KP_LINEAR * distance<=2.0){
+            if(KP_LINEAR * distance<=4.0){
                 ctr_msg.linear.x=KP_LINEAR * distance;
             }else{
-                ctr_msg.linear.x=2.0;
+                ctr_msg.linear.x=4.0;
             }
             ctr_msg.angular.z = KP_ANGULAR * distheta;
         }
