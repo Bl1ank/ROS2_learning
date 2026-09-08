@@ -13,6 +13,7 @@ find_package(rclcpp REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(demo_cpp_node src/demo_cpp_node.cpp)
+# 该依赖写法为cmake原生写法
 target_include_directories(demo_cpp_node PUBLIC ${rclcpp_INCLUDE_DIRS})
 target_link_libraries(demo_cpp_node ${rclcpp_LIBRARIES})
 
