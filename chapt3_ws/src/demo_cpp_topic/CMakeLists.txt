@@ -10,20 +10,28 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(turtlesim REQUIRED)
+find_package(turtlenode_status REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
 add_executable(turtle_pose_control src/turtle_pose_control.cpp)
+add_executable(turtle_status_pub src/turtle_status_pub.cpp)
 # 该写法为ROS封装的依赖写法
 ament_target_dependencies(turtle_pose_control
   rclcpp
   geometry_msgs
   turtlesim
 )
+ament_target_dependencies(turtle_status_pub
+  rclcpp
+  turtlenode_status
+  turtlesim
+)
 
 install(TARGETS
   turtle_pose_control
+  turtle_status_pub
   DESTINATION lib/${PROJECT_NAME}
 )
 

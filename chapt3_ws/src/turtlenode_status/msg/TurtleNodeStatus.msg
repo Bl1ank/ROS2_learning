@@ -1,0 +1,3 @@
+builtin_interfaces/Time stamp
+string robot_name
+bool running_status
