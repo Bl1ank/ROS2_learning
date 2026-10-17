@@ -43,8 +43,8 @@ public:
         //生成初始随机点
         random_point_output();
         //用定时器向小海龟控制节点发布话题
-        m_control_timer=this->create_wall_timer(20ms,std::bind(&TurtlePoseControl::ctl_func));
-        m_rest_timer=this->create_wall_timer(2s,std::bind(&TurtlePoseControl::reset_func)); 
+        m_control_timer=this->create_wall_timer(20ms,std::bind(&TurtlePoseControl::ctl_func,this));
+        m_rest_timer=this->create_wall_timer(2s,std::bind(&TurtlePoseControl::reset_func,this)); 
         m_rest_timer->cancel();     
     }
     //生成随机点
