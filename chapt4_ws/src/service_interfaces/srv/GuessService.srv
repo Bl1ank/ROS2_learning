@@ -1,0 +1,4 @@
+int64 max_num
+int64 min_num
+---
+int64 goal_num
