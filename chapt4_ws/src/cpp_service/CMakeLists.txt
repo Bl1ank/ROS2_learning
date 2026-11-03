@@ -12,6 +12,8 @@ find_package(service_interfaces REQUIRED)
 
 add_executable(guess_node src/guess_node.cpp)
 add_executable(send_node src/send_node.cpp)
+add_executable(service_node src/service_node.cpp)
+add_executable(client_node src/client_node.cpp)
 ament_target_dependencies(guess_node 
   rclcpp 
   service_interfaces
@@ -20,11 +22,26 @@ ament_target_dependencies(send_node
   rclcpp 
   service_interfaces
 )
+ament_target_dependencies(service_node 
+  rclcpp 
+  service_interfaces
+  rcl_interfaces
+)
+ament_target_dependencies(client_node 
+  rclcpp 
+  service_interfaces
+)
 
 install(TARGETS
   guess_node
   send_node
+  service_node
+  client_node
   DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
