@@ -14,7 +14,10 @@ find_package(tf2_geometry_msgs REQUIRED)
 
 add_executable(static_tf src/static_tf.cpp)
 ament_target_dependencies(static_tf rclcpp tf2_ros geometry_msgs tf2_geometry_msgs)
-
+add_executable(dynamic_tf src/dynamic_tf.cpp)
+ament_target_dependencies(dynamic_tf rclcpp tf2_ros geometry_msgs tf2_geometry_msgs)
+add_executable(tf_listener src/tf_listener.cpp)
+ament_target_dependencies(tf_listener rclcpp tf2_ros geometry_msgs tf2_geometry_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,9 +32,11 @@ if(BUILD_TESTING)
 endif()
 
 
-install(TARGETS
-  static_tf
+install(TARGETS static_tf dynamic_tf tf_listener
   DESTINATION lib/${PROJECT_NAME}
   )
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
