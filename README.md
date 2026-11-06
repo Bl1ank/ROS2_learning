@@ -16,3 +16,6 @@
 
 ## chapt5
 * learning tools of ROS2 : **TF**,**rqt**,**Rviz**
+
+## chapt6
+* learning **Modeling** and **Simulation**
