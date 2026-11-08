@@ -18,7 +18,7 @@ def generate_launch_description():
         name='mode', default_value=str(default_urdf_path), description='加载的模型文件路径'
     )
     # 使用Command substitution来读取urdf文件内容
-    substitutinos_command_result=launch.substitutions.Command(['cat ',launch.substitutions.LaunchConfiguration('mode')])
+    substitutinos_command_result=launch.substitutions.Command(['xacro ',launch.substitutions.LaunchConfiguration('model')])
     # 将urdf文件内容作为参数传入robot_state_publisher节点
     robot_description_value=launch_ros.parameter_descriptions.ParameterValue(substitutinos_command_result, value_type=str)
 
