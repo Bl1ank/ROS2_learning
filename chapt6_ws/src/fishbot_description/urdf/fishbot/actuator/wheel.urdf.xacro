@@ -3,6 +3,13 @@
 <xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
     <xacro:macro name="wheel_xacro" params="wheel_name xyz">
 
+        <gazebo reference="${wheel_name}_wheel_link">
+            <mu1 value="20.0" />
+            <mu2 value="20.0" />
+            <kp value="1000000000.0" />
+            <kd value="1.0" />
+        </gazebo>
+        
         <link name="${wheel_name}_link">
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="1.57079 0.0 0.0"/>
