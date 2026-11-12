@@ -123,6 +123,16 @@ def generate_launch_description():
     default_output_dir = os.path.join(
         os.path.expanduser('~'), '.cache', 'fishbot_description'
     )
+    bridge = Node(
+    package='ros_gz_bridge',
+    executable='parameter_bridge',
+    arguments=[
+        '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',   # ROS -> Gazebo
+        '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',     # Gazebo -> ROS
+        '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',        # 可选，给 RViz 用
+        '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+    ],
+    output='screen')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -151,4 +161,5 @@ def generate_launch_description():
             description='xacro 转出的 URDF/SDF 中间文件存放目录',
         ),
         OpaqueFunction(function=launch_setup),
+        bridge
     ])

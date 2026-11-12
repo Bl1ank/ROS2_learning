@@ -34,9 +34,20 @@ def generate_launch_description():
         arguments=['-topic', 'robot_description', '-name', 'fishbot', '-z', '0.1'],
         output='screen')
 
+    bridge = launch_ros.actions.Node(
+    package='ros_gz_bridge',
+    executable='parameter_bridge',
+    arguments=[
+        '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',   # ROS -> Gazebo
+        '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',     # Gazebo -> ROS
+        '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',        # 可选，给 RViz 用
+        '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+    ],
+    output='screen')
     return launch.LaunchDescription([
         declare_model,
         robot_state_publisher,
         gz_sim,
         spawn_entity,
+        bridge
     ])
