@@ -4,10 +4,11 @@
     <xacro:macro name="wheel_xacro" params="wheel_name xyz">
 
         <gazebo reference="${wheel_name}_link">
-            <mu1 value="20.0" />
-            <mu2 value="20.0" />
-            <kp value="1000000000.0" />
-            <kd value="1.0" />
+            <!-- 只保留跨引擎有效的部分，值改成物理量级 -->
+            <mu1 value="1.2"/>
+            <mu2 value="1.2"/>
+            <!-- 可选：DART 支持的滚动/扭转摩擦，视 gz-physics 版本而定 -->
+            <!-- <torsional><coefficient>0.1</coefficient></torsional> -->
         </gazebo>
         
         <link name="${wheel_name}_link">

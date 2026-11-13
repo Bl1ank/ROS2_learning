@@ -13,8 +13,6 @@
 <!-- plugin part -->
 <xacro:include filename="$(find fishbot_description)/urdf/fishbot/plugins/gazebo_control_plugin.xacro"/>
 
-<xacro:include filename="$(find fishbot_description)/urdf/fishbot/plugins/gazebo_sensor_plugin.xacro"/>
-
 <xacro:base_xacro radius="0.1" length="0.12"/>
 <xacro:imu_xacro xyz="0.0 0.0 0.02"/>
 <xacro:camera_xacro xyz="0.10 0.0 0.075"/>

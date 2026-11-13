@@ -24,7 +24,8 @@ if(BUILD_TESTING)
 endif()
 
 
-install(DIRECTORY launch urdf config
+
+install(DIRECTORY launch urdf config worlds
   DESTINATION share/${PROJECT_NAME}
 )
 ament_package()
