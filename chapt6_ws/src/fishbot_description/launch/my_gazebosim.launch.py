@@ -46,6 +46,7 @@ def generate_launch_description():
         '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',   # ROS -> Gazebo
         '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',     # Gazebo -> ROS
         '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',        # 可选，给 RViz 用
+        '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
         '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
     ],
     output='screen')

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ==================================================================
+       Gazebo Harmonic (gz-sim8) + ROS 2 Jazzy 激光雷达
+       - 传感器数据由 gz-sim 的 Sensors 系统直接产生，发布在 gz 话题上
+       - 由 ros_gz_bridge 转换成 sensor_msgs/msg/LaserScan（见 launch 文件）
+       ================================================================== -->
+
+  <!-- 1) 激光雷达传感器本体 -->
+  <xacro:macro name="gazebo_sensor_plugin"
+               params="link:=laser_link
+                       gz_topic:=scan
+                       name:=laserscan
+                       update_rate:=10
+                       samples:=360
+                       min_angle:=0.0
+                       max_angle:=6.283185
+                       range_min:=0.12
+                       range_max:=8.0
+                       range_resolution:=0.015
+                       noise_mean:=0.0
+                       noise_stddev:=0.01
+                       visualize:=true">
+    <gazebo reference="${link}">
+      <!-- Harmonic 中 ray → gpu_lidar（GPU 加速；无 GPU 时见文末说明） -->
+      <sensor name="${name}" type="gpu_lidar">
+        <always_on>true</always_on>
+        <visualize>${visualize}</visualize>
+        <update_rate>${update_rate}</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+
+        <!-- 覆盖 LaserScan 消息的 header.frame_id（原 frame_name 的替代） -->
+        <gz_frame_id>${link}</gz_frame_id>
+
+        <!-- gz 侧话题名：/scan → 由 bridge 映射到 ROS
+             若模型被命名空间化，实际话题会是 /model/<model>/link/... 用 gz topic -l 确认 -->
+        <topic>${gz_topic}</topic>
+
+        <lidar>
+          <!-- 扫描范围：0 ~ 360° -->
+          <scan>
+            <horizontal>
+              <samples>${samples}</samples>
+              <resolution>1</resolution>
+              <min_angle>${min_angle}</min_angle>
+              <max_angle>${max_angle}</max_angle>
+            </horizontal>
+          </scan>
+
+          <!-- 扫描距离 -->
+          <range>
+            <min>${range_min}</min>
+            <max>${range_max}</max>
+            <resolution>${range_resolution}</resolution>
+          </range>
+
+          <!-- 噪声（SDF 1.9+ 用 type 属性） -->
+          <noise type="gaussian">
+            <mean>${noise_mean}</mean>
+            <stddev>${noise_stddev}</stddev>
+          </noise>
+        </lidar>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 2) gz-sim Sensors 系统插件（整机只加载一次，建议放在 world/主 xacro 里）
+         若 world 文件中已加载 Sensors 系统，请删掉对本宏的调用，避免重复加载 -->
+  <xacro:macro name="gz_sensors_system" params="render_engine:=ogre2">
+    <gazebo>
+      <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+        <render_engine>${render_engine}</render_engine>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 用法示例：
+       <xacro:gz_sensors_system/>
+       <xacro:gazebo_sensor_plugin link="laser_link" gz_topic="scan" update_rate="10"/>
+  -->
+
+</robot>

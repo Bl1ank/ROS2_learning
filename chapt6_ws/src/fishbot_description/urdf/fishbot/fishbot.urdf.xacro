@@ -12,6 +12,7 @@
 
 <!-- plugin part -->
 <xacro:include filename="$(find fishbot_description)/urdf/fishbot/plugins/gazebo_control_plugin.xacro"/>
+<xacro:include filename="$(find fishbot_description)/urdf/fishbot/plugins/gazebo_sensor_plugin.xacro"/>
 
 <xacro:base_xacro radius="0.1" length="0.12"/>
 <xacro:imu_xacro xyz="0.0 0.0 0.02"/>
@@ -24,5 +25,6 @@
 <xacro:caster_xacro caster_name="right_caster" xyz="-0.08 0.0 -0.076"/>
 
 <xacro:gazebo_control_plugin/>
-
+<xacro:gz_sensors_system/>
+<xacro:gazebo_sensor_plugin link="laser_link" gz_topic="scan" update_rate="10"/>
 </robot>
