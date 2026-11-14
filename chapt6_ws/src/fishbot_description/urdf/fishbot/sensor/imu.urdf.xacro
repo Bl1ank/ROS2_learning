@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
-    <xacro:macro name="imu_xacro" params="xyz">
+<robot name="fishbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro"/>
+
+    <xacro:macro name="imu_xacro" params="xyz:='0 0 0'">
 
         <link name="imu_link">
             <visual>
@@ -19,9 +20,6 @@
                 <geometry>
                     <box size="0.02 0.02 0.02"/>
                 </geometry>
-                <material name="black">
-                    <color rgba="0.0 0.0 0.0 0.5"/>
-                </material>
             </collision>
             <xacro:box_inertia m="0.05" w="0.02" h="0.02" d="0.02"/>
         </link>
@@ -32,6 +30,72 @@
             <origin xyz="${xyz}" rpy="0.0 0.0 0.0"/>
         </joint>
     
+    </xacro:macro>
+
+    <xacro:macro name="imu_sensor" params="link_name:=imu_link topic:=imu update_rate:=100">
+        <gazebo reference="${link_name}">
+            <sensor name="imu_sensor" type="imu">
+                <always_on>true</always_on>
+                <update_rate>${update_rate}</update_rate>
+                <visualize>false</visualize>
+                <gz_frame_id>${link_name}</gz_frame_id>
+                <topic>${topic}</topic>
+                <imu>
+                    <angular_velocity>
+                        <x>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                                <bias_mean>0.0000075</bias_mean>
+                                <bias_stddev>0.0000008</bias_stddev>
+                            </noise>
+                        </x>
+                        <y>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                                <bias_mean>0.0000075</bias_mean>
+                                <bias_stddev>0.0000008</bias_stddev>
+                            </noise>
+                        </y>
+                        <z>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                                <bias_mean>0.0000075</bias_mean>
+                                <bias_stddev>0.0000008</bias_stddev>
+                            </noise>
+                        </z>
+                    </angular_velocity>
+                    <linear_acceleration>
+                        <x>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                                <bias_mean>0.1</bias_mean>
+                                <bias_stddev>0.001</bias_stddev>
+                            </noise>
+                        </x>
+                        <y>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                                <bias_mean>0.1</bias_mean>
+                                <bias_stddev>0.001</bias_stddev>
+                            </noise>
+                        </y>
+                        <z>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                                <bias_mean>0.1</bias_mean>
+                                <bias_stddev>0.001</bias_stddev>
+                            </noise>
+                        </z>
+                    </linear_acceleration>
+                </imu>
+            </sensor>
+        </gazebo>
     </xacro:macro>
 
 </robot>

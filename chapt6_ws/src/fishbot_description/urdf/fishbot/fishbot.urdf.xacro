@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="fishbot">
+<robot name="fishbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 <!-- sensor part -->
 <xacro:include filename="$(find fishbot_description)/urdf/fishbot/base.urdf.xacro"/>
 <xacro:include filename="$(find fishbot_description)/urdf/fishbot/sensor/laser.urdf.xacro"/>
@@ -19,12 +19,16 @@
 <xacro:camera_xacro xyz="0.10 0.0 0.075"/>
 <xacro:laser_xacro xyz="0.0 0.0 0.10"/>
 
+<!-- sensor simulation -->
+<xacro:imu_sensor link_name="imu_link" topic="/imu" update_rate="1"/>
+<xacro:gazebo_laser_sensor link_name="laser_link" gz_topic="/scan" update_rate="10"/>
+
 <xacro:wheel_xacro wheel_name="left_wheel" xyz="0.0 0.10 -0.06"/>
 <xacro:wheel_xacro wheel_name="right_wheel" xyz="0.0 -0.10 -0.06"/>
 <xacro:caster_xacro caster_name="left_caster" xyz="0.08 0.0 -0.076"/>
 <xacro:caster_xacro caster_name="right_caster" xyz="-0.08 0.0 -0.076"/>
 
 <xacro:gazebo_control_plugin/>
-<xacro:gz_sensors_system/>
-<xacro:gazebo_sensor_plugin link="laser_link" gz_topic="scan" update_rate="10"/>
+<!-- Sensors system 已在 world.sdf 中加载，这里不要再重复加载 -->
+<xacro:gz_imu_system/>
 </robot>

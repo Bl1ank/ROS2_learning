@@ -1,15 +1,8 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
-    <xacro:macro name="caster_xacro" params="caster_name xyz">
+<robot name="fishbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro"/>
 
-        <gazebo reference="${caster_name}_link">
-            <!-- 只保留跨引擎有效的部分，值改成物理量级 -->
-            <mu1 value="0.0"/>
-            <mu2 value="0.0"/>
-            <!-- 可选：DART 支持的滚动/扭转摩擦，视 gz-physics 版本而定 -->
-            <!-- <torsional><coefficient>0.1</coefficient></torsional> -->
-        </gazebo>
+    <xacro:macro name="caster_xacro" params="caster_name xyz">
         
         <link name="${caster_name}_link">
             <visual>
@@ -39,6 +32,11 @@
             <child link="${caster_name}_link"/>
             <origin xyz="${xyz}" rpy="0.0 0.0 0.0"/>
         </joint>
+
+        <gazebo reference="${caster_name}_link">
+            <mu1 value="0.0"/>
+            <mu2 value="0.0"/>
+        </gazebo>
 
     </xacro:macro>    
 

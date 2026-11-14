@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
+<robot name="fishbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro"/>
     <xacro:macro name="camera_xacro" params="xyz">
 
         <link name="camera_link">
@@ -19,9 +19,6 @@
                 <geometry>
                     <box size="0.02 0.10 0.02"/>
                 </geometry>
-                <material name="black">
-                    <color rgba="0.0 0.0 0.0 0.5"/>
-                </material>
             </collision>
             <xacro:box_inertia m="0.10" w="0.02" h="0.10" d="0.02"/>
         </link>
@@ -34,4 +31,67 @@
     
     </xacro:macro>
 
+    <xacro:macro name="camera_sensor">
+        <gazebo reference="camera_link">
+            <sensor name="camera_sensor" type="camera">
+                <always_on>true</always_on>
+                <update_rate>30</update_rate>
+                <gz_frame_id>camera_link</gz_frame_id>
+                <topic>/camera/image_raw</topic>
+                <camera>
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+                    <clip><near>0.05</near><far>10</far></clip>
+                </camera>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:property name="cam_w"    value="800"/>
+    <xacro:property name="cam_h"    value="600"/>
+    <xacro:property name="cam_fps"  value="10"/>
+    <xacro:property name="cam_hfov" value="1.5009831567"/> 
+    <xacro:property name="cam_fx"   value="429.0"/>
+    <xacro:property name="cam_fy"   value="429.0"/>
+    <xacro:property name="cam_cx"   value="400.0"/>
+    <xacro:property name="cam_cy"   value="300.0"/>
+
+    <gazebo reference="camera_link">
+        <sensor name="camera_sensor" type="depth_camera">
+            <always_on>true</always_on>
+            <update_rate>${cam_fps}</update_rate>
+            <visualize>false</visualize>
+            <topic>/camera/depth</topic>
+            <gz_frame_id>camera_link</gz_frame_id>
+            <camera name="camera">
+                <horizontal_fov>${cam_hfov}</horizontal_fov>
+                <image>
+                    <width>${cam_w}</width>
+                    <height>${cam_h}</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>100.0</far>
+                </clip>
+                <lens>
+                    <intrinsics>
+                        <fx>${cam_fx}</fx>
+                        <fy>${cam_fy}</fy>
+                        <cx>${cam_cx}</cx>
+                        <cy>${cam_cy}</cy>
+                        <s>0.0</s>
+                    </intrinsics>
+                </lens>
+                <distortion>
+                    <k1>0.0</k1>
+                    <k2>0.0</k2>
+                    <k3>0.0</k3>
+                    <p1>0.0</p1>
+                    <p2>0.0</p2>
+                    <center>0.5 0.5</center>
+                </distortion>
+            </camera>
+        </sensor>
+    </gazebo>
 </robot>

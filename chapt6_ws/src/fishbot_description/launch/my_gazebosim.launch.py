@@ -23,7 +23,7 @@ def generate_launch_description():
     robot_state_publisher = launch_ros.actions.Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        parameters=[{'robot_description': robot_description}],
+        parameters=[{'robot_description': robot_description, 'use_sim_time': True}],
         output='screen')
 
     gz_sim = IncludeLaunchDescription(
@@ -47,6 +47,10 @@ def generate_launch_description():
         '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',     # Gazebo -> ROS
         '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',        # 可选，给 RViz 用
         '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+        '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU',
+        '/camera/depth@sensor_msgs/msg/Image[gz.msgs.Image',
+        '/camera/depth/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+        '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
         '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
     ],
     output='screen')
